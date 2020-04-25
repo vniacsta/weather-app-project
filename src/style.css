@@ -1,0 +1,115 @@
+body {
+  font-family: "Titillium Web", sans-serif;
+  color: #636363;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.box {
+  border: 0.7px solid #636363;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  background-color: #faf8f7;
+  background-image: url("media/undraw_weather_app_i5sm.svg");
+  background-size: 150px;
+  background-position: 80px 140px;
+  background-repeat: no-repeat;
+}
+
+.fas {
+  color: #636363;
+}
+
+.search-box,
+.form-btn,
+.celsius-btn,
+.fahrenheit-btn {
+  margin-top: 15px;
+  padding: 6px;
+  border: 0.7px solid #636363;
+}
+
+.search-box,
+.form-btn {
+  border-radius: 5px;
+}
+
+.search-box {
+  width: 300px;
+  margin-left: 15px;
+}
+
+.form-btn,
+.celsius-btn,
+.fahrenheit-btn {
+  background: none;
+  width: 40px;
+}
+
+.form-btn:hover {
+  background: #f2f2f2;
+}
+
+.celsius-btn,
+.fahrenheit-btn {
+  border-radius: 10px;
+}
+
+.celsius-btn {
+  margin-left: 23px;
+  background: #f7e4df;
+}
+
+h1 {
+  padding: 15px 0 5px 20px;
+  font-size: 34px;
+}
+
+.date-description {
+  padding-left: 37px;
+  font-size: 14px;
+}
+
+.icon {
+  position: relative;
+  bottom: 25px;
+  left: 85px;
+}
+
+h2 {
+  position: relative;
+  right: 18px;
+}
+
+.current-temp {
+  font-size: 45px;
+}
+
+.unit {
+  position: relative;
+  left: 2px;
+  bottom: 10px;
+}
+
+.weather-extra {
+  font-size: 14px;
+  position: relative;
+  left: 353px;
+  bottom: 25px;
+}
+
+li {
+  list-style: none;
+}
+
+.author a {
+  color: #636363;
+  text-decoration: underline;
+}
+
+.author a:hover {
+  color: #000000;
+}

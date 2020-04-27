@@ -82,7 +82,7 @@ h1 {
 
 h2 {
   position: relative;
-  right: 18px;
+  right: 6px;
 }
 
 .current-temp {
@@ -98,7 +98,7 @@ h2 {
 .weather-extra {
   font-size: 14px;
   position: relative;
-  left: 353px;
+  left: 360px;
   bottom: 25px;
 }
 

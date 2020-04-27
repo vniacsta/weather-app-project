@@ -71,6 +71,7 @@ h1 {
 .date-description {
   padding-left: 37px;
   font-size: 14px;
+  text-transform: capitalize;
 }
 
 .icon {

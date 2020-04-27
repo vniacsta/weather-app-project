@@ -50,13 +50,27 @@ function displayRealTemp(response) {
 
 let city = document.querySelector("#searched-city");
 
-function lookForWeatherData(event) {
+let searchedCity = document.querySelector("#submit-btn");
+searchedCity.addEventListener("click", function (event) {
   event.preventDefault();
 
   let apiKey = "5ce165099db98eb1a4172c9b8eea4597";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=${apiKey}&units=metric`;
 
   axios.get(apiUrl).then(displayRealTemp);
-}
-let searchedCity = document.querySelector("#submit-btn");
-searchedCity.addEventListener("click", lookForWeatherData);
+});
+
+let currentLocation = document.querySelector("#location-btn");
+currentLocation.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+
+    let apiKey = "5ce165099db98eb1a4172c9b8eea4597";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+
+    axios.get(apiUrl).then(displayRealTemp);
+  });
+});

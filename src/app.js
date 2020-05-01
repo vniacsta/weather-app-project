@@ -42,8 +42,9 @@ function displayRealTemp(response) {
   );
   weatherIconElement.setAttribute("alt", response.data.weather[0].description);
 
+  celsiusTemp = Math.round(response.data.main.temp);
   let tempElement = document.querySelector("#temp");
-  tempElement.innerHTML = Math.round(response.data.main.temp);
+  tempElement.innerHTML = celsiusTemp;
 
   let humidityElement = document.querySelector("#humidity");
   humidityElement.innerHTML = response.data.main.humidity;
@@ -53,13 +54,14 @@ function displayRealTemp(response) {
 }
 
 function displayForecast(response) {
-  console.log(response);
-
   let forecastElement = document.querySelector("#forecast");
   forecastElement.innerHTML = null;
 
   for (let index = 0; index < 6; index++) {
     let forecast = response.data.list[index];
+
+    let maxTempForecast = Math.round(forecast.main.temp_max);
+    let minTempForecast = Math.round(forecast.main.temp_min);
 
     forecastElement.innerHTML += `
     <div class="col-2">
@@ -70,11 +72,7 @@ function displayForecast(response) {
         forecast.weather[0].icon
       }@2x.png" alt="${forecast.weather[0].description}" height="75" />
       <div>
-        <strong>${Math.round(
-          forecast.main.temp_max
-        )}</strong><span class="forecast-unit">ºC</span> ${Math.round(
-      forecast.main.temp_min
-    )}<span class="forecast-unit">ºC</span>
+        <strong><span class="max-temp">${maxTempForecast}</span></strong><span class="forecast-unit unit">ºC</span> <span class="min-temp">${minTempForecast}</span><span class="forecast-unit unit">ºC</span>
       </div>
     </div>
     `;
@@ -119,5 +117,39 @@ currentLocation.addEventListener("click", function (event) {
     axios.get(apiUrl).then(displayForecast);
   });
 });
+
+let changeUnitToF = document.querySelector("#fahrenheit");
+changeUnitToF.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  document.getElementById("fahrenheit").style.background = "#f7e4df";
+  document.getElementById("celsius").style.background = "none";
+
+  let currentTempF = document.querySelector("#temp");
+  currentTempF.innerHTML = Math.round((celsiusTemp * 9) / 5 + 32);
+
+  let unitF = document.querySelectorAll(".unit");
+  for (let index = 0; index < unitF.length; index++) {
+    unitF[index].innerHTML = "ºF";
+  }
+});
+
+let changeUnitToC = document.querySelector("#celsius");
+changeUnitToC.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  document.getElementById("fahrenheit").style.background = "none";
+  document.getElementById("celsius").style.background = "#f7e4df";
+
+  let currentTempC = document.querySelector("#temp");
+  currentTempC.innerHTML = celsiusTemp;
+
+  let unitC = document.querySelectorAll(".unit");
+  for (let index = 0; index < unitC.length; index++) {
+    unitC[index].innerHTML = "ºC";
+  }
+});
+
+let celsiusTemp = null;
 
 search("Porto");

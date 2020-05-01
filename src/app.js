@@ -12,15 +12,19 @@ function formatDate(timestamp) {
   ];
   let weekDay = weekDays[date.getDay()];
 
+  return `${weekDay} ${formatHours(timestamp)}`;
+}
+
+function formatHours(timestamp) {
+  let date = new Date(timestamp);
+
   let hours = ("0" + date.getHours()).slice(-2);
   let minutes = ("0" + date.getMinutes()).slice(-2);
 
-  return `${weekDay} ${hours}:${minutes}`;
+  return `${hours}:${minutes}`;
 }
 
 function displayRealTemp(response) {
-  event.preventDefault();
-
   let cityElement = document.querySelector("#city");
   cityElement.innerHTML = response.data.name;
 
@@ -48,16 +52,53 @@ function displayRealTemp(response) {
   windElement.innerHTML = Math.round(response.data.wind.speed);
 }
 
-let city = document.querySelector("#searched-city");
+function displayForecast(response) {
+  console.log(response);
+
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = null;
+
+  for (let index = 0; index < 6; index++) {
+    let forecast = response.data.list[index];
+
+    forecastElement.innerHTML += `
+    <div class="col-2">
+      <h6>
+        ${formatHours(forecast.dt * 1000)}
+      </h6>
+      <img src="http://openweathermap.org/img/wn/${
+        forecast.weather[0].icon
+      }@2x.png" alt="${forecast.weather[0].description}" height="75" />
+      <div>
+        <strong>${Math.round(
+          forecast.main.temp_max
+        )}</strong><span class="forecast-unit">ºC</span> ${Math.round(
+      forecast.main.temp_min
+    )}<span class="forecast-unit">ºC</span>
+      </div>
+    </div>
+    `;
+  }
+}
+
+function search(city) {
+  let apiKey = "5ce165099db98eb1a4172c9b8eea4597";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  axios.get(apiUrl).then(displayRealTemp);
+
+  apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+
+  axios.get(apiUrl).then(displayForecast);
+}
 
 let searchedCity = document.querySelector("#submit-btn");
 searchedCity.addEventListener("click", function (event) {
   event.preventDefault();
 
-  let apiKey = "5ce165099db98eb1a4172c9b8eea4597";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=${apiKey}&units=metric`;
+  let cityInput = document.querySelector("#searched-city");
 
-  axios.get(apiUrl).then(displayRealTemp);
+  search(cityInput.value);
 });
 
 let currentLocation = document.querySelector("#location-btn");
@@ -69,8 +110,14 @@ currentLocation.addEventListener("click", function (event) {
     let longitude = position.coords.longitude;
 
     let apiKey = "5ce165099db98eb1a4172c9b8eea4597";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then(displayRealTemp);
+
+    apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+    axios.get(apiUrl).then(displayForecast);
   });
 });
+
+search("Porto");

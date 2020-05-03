@@ -118,6 +118,10 @@ li {
   width: 100%;
 }
 
+.col-2 {
+  padding: 0 10px;
+}
+
 h6 {
   padding: 0;
   margin: 0;

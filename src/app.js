@@ -42,9 +42,9 @@ function displayRealTemp(response) {
   );
   weatherIconElement.setAttribute("alt", response.data.weather[0].description);
 
-  celsiusTemp = Math.round(response.data.main.temp);
+  celsiusCurrentTemp = Math.round(response.data.main.temp);
   let tempElement = document.querySelector("#temp");
-  tempElement.innerHTML = celsiusTemp;
+  tempElement.innerHTML = celsiusCurrentTemp;
 
   let humidityElement = document.querySelector("#humidity");
   humidityElement.innerHTML = response.data.main.humidity;
@@ -125,8 +125,32 @@ changeUnitToF.addEventListener("click", function (event) {
   document.getElementById("fahrenheit").style.background = "#f7e4df";
   document.getElementById("celsius").style.background = "none";
 
-  let currentTempF = document.querySelector("#temp");
-  currentTempF.innerHTML = Math.round((celsiusTemp * 9) / 5 + 32);
+  let currentTempToF = document.querySelector("#temp");
+  currentTempToF.innerHTML = Math.round((celsiusCurrentTemp * 9) / 5 + 32);
+
+  let forecastMaxTempToF = document.querySelectorAll(".max-temp");
+  forecastMaxTempToF.innerHTML = null;
+  if (
+    document.querySelectorAll("small.weather-unit").item(0).innerHTML != "ºF"
+  ) {
+    for (let index = 0; index < forecastMaxTempToF.length; index++) {
+      forecastMaxTempToF[index].innerHTML = Math.round(
+        (forecastMaxTempToF.item(index).innerHTML * 9) / 5 + 32
+      );
+    }
+  }
+
+  let forecastMinTempToF = document.querySelectorAll(".min-temp");
+  forecastMinTempToF.innerHTML = null;
+  if (
+    document.querySelectorAll("small.weather-unit").item(0).innerHTML != "ºF"
+  ) {
+    for (let index = 0; index < forecastMinTempToF.length; index++) {
+      forecastMinTempToF[index].innerHTML = Math.round(
+        (forecastMinTempToF.item(index).innerHTML * 9) / 5 + 32
+      );
+    }
+  }
 
   let unitF = document.querySelectorAll(".unit");
   for (let index = 0; index < unitF.length; index++) {
@@ -141,8 +165,32 @@ changeUnitToC.addEventListener("click", function (event) {
   document.getElementById("fahrenheit").style.background = "none";
   document.getElementById("celsius").style.background = "#f7e4df";
 
-  let currentTempC = document.querySelector("#temp");
-  currentTempC.innerHTML = celsiusTemp;
+  let currentTempToC = document.querySelector("#temp");
+  currentTempToC.innerHTML = celsiusCurrentTemp;
+
+  let forecastMaxTempToC = document.querySelectorAll(".max-temp");
+  forecastMaxTempToC.innerHTML = null;
+  if (
+    document.querySelectorAll("small.weather-unit").item(0).innerHTML != "ºC"
+  ) {
+    for (let index = 0; index < forecastMaxTempToC.length; index++) {
+      forecastMaxTempToC[index].innerHTML = Math.round(
+        (forecastMaxTempToC.item(index).innerHTML - 32) / 1.8
+      );
+    }
+  }
+
+  let forecastMinTempToC = document.querySelectorAll(".min-temp");
+  forecastMinTempToC.innerHTML = null;
+  if (
+    document.querySelectorAll("small.weather-unit").item(0).innerHTML != "ºC"
+  ) {
+    for (let index = 0; index < forecastMinTempToC.length; index++) {
+      forecastMinTempToC[index].innerHTML = Math.round(
+        (forecastMinTempToC.item(index).innerHTML - 32) / 1.8
+      );
+    }
+  }
 
   let unitC = document.querySelectorAll(".unit");
   for (let index = 0; index < unitC.length; index++) {
@@ -150,6 +198,6 @@ changeUnitToC.addEventListener("click", function (event) {
   }
 });
 
-let celsiusTemp = null;
+let celsiusCurrentTemp = null;
 
 search("Porto");

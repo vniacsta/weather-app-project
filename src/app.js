@@ -50,7 +50,7 @@ function displayRealTemp(response) {
   humidityElement.innerHTML = response.data.main.humidity;
 
   let windElement = document.querySelector("#wind");
-  windElement.innerHTML = Math.round(response.data.wind.speed);
+  windElement.innerHTML = Math.round(response.data.wind.speed * 3.6);
 }
 
 function displayForecast(response) {
@@ -118,15 +118,12 @@ currentLocation.addEventListener("click", function (event) {
   });
 });
 
-let changeUnitToF = document.querySelector("#fahrenheit");
-changeUnitToF.addEventListener("click", function (event) {
-  event.preventDefault();
-
+function displayTempInFahrenheit(event) {
   document.getElementById("fahrenheit").style.background = "#f7e4df";
   document.getElementById("celsius").style.background = "none";
 
   let currentTempToF = document.querySelector("#temp");
-  currentTempToF.innerHTML = Math.round((celsiusCurrentTemp * 9) / 5 + 32);
+  currentTempToF.innerHTML = Math.round(celsiusCurrentTemp * 1.8 + 32);
 
   let forecastMaxTempToF = document.querySelectorAll(".max-temp");
   forecastMaxTempToF.innerHTML = null;
@@ -135,7 +132,7 @@ changeUnitToF.addEventListener("click", function (event) {
   ) {
     for (let index = 0; index < forecastMaxTempToF.length; index++) {
       forecastMaxTempToF[index].innerHTML = Math.round(
-        (forecastMaxTempToF.item(index).innerHTML * 9) / 5 + 32
+        forecastMaxTempToF.item(index).innerHTML * 1.8 + 32
       );
     }
   }
@@ -147,7 +144,7 @@ changeUnitToF.addEventListener("click", function (event) {
   ) {
     for (let index = 0; index < forecastMinTempToF.length; index++) {
       forecastMinTempToF[index].innerHTML = Math.round(
-        (forecastMinTempToF.item(index).innerHTML * 9) / 5 + 32
+        forecastMinTempToF.item(index).innerHTML * 1.8 + 32
       );
     }
   }
@@ -156,12 +153,11 @@ changeUnitToF.addEventListener("click", function (event) {
   for (let index = 0; index < unitF.length; index++) {
     unitF[index].innerHTML = "ºF";
   }
-});
+}
+let changeUnitToF = document.querySelector("#fahrenheit");
+changeUnitToF.addEventListener("click", displayTempInFahrenheit);
 
-let changeUnitToC = document.querySelector("#celsius");
-changeUnitToC.addEventListener("click", function (event) {
-  event.preventDefault();
-
+function displayTempInCelsius(event) {
   document.getElementById("fahrenheit").style.background = "none";
   document.getElementById("celsius").style.background = "#f7e4df";
 
@@ -196,7 +192,9 @@ changeUnitToC.addEventListener("click", function (event) {
   for (let index = 0; index < unitC.length; index++) {
     unitC[index].innerHTML = "ºC";
   }
-});
+}
+let changeUnitToC = document.querySelector("#celsius");
+changeUnitToC.addEventListener("click", displayTempInCelsius);
 
 let celsiusCurrentTemp = null;
 

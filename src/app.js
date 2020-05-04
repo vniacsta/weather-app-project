@@ -42,9 +42,13 @@ function displayRealTemp(response) {
   );
   weatherIconElement.setAttribute("alt", response.data.weather[0].description);
 
-  celsiusCurrentTemp = Math.round(response.data.main.temp);
   let tempElement = document.querySelector("#temp");
-  tempElement.innerHTML = celsiusCurrentTemp;
+  celsiusCurrentTemp = Math.round(response.data.main.temp);
+  if (defaultUnit.classList.contains("active-unit")) {
+    tempElement.innerHTML = celsiusCurrentTemp;
+  } else {
+    tempElement.innerHTML = Math.round(celsiusCurrentTemp * 1.8 + 32);
+  }
 
   let humidityElement = document.querySelector("#humidity");
   humidityElement.innerHTML = response.data.main.humidity;
@@ -63,8 +67,9 @@ function displayForecast(response) {
     let maxTempForecast = Math.round(forecast.main.temp_max);
     let minTempForecast = Math.round(forecast.main.temp_min);
 
-    forecastElement.innerHTML += `
-    <div class="col-2">
+    if (defaultUnit.classList.contains("active-unit")) {
+      forecastElement.innerHTML += `
+      <div class="col-2">
       <h6>
         ${formatHours(forecast.dt * 1000)}
       </h6>
@@ -74,8 +79,27 @@ function displayForecast(response) {
       <div>
         <strong><span class="max-temp">${maxTempForecast}</span></strong><span class="forecast-unit unit">ºC</span> <span class="min-temp">${minTempForecast}</span><span class="forecast-unit unit">ºC</span>
       </div>
-    </div>
+      </div>
     `;
+    } else {
+      forecastElement.innerHTML += `
+      <div class="col-2">
+      <h6>
+        ${formatHours(forecast.dt * 1000)}
+      </h6>
+      <img src="http://openweathermap.org/img/wn/${
+        forecast.weather[0].icon
+      }@2x.png" alt="${forecast.weather[0].description}" height="75" />
+      <div>
+        <strong><span class="max-temp">${Math.round(
+          maxTempForecast * 1.8 + 32
+        )}</span></strong><span class="forecast-unit unit">ºF</span> <span class="min-temp">${Math.round(
+        minTempForecast * 1.8 + 32
+      )}</span><span class="forecast-unit unit">ºF</span>
+      </div>
+      </div>
+    `;
+    }
   }
 }
 
@@ -153,6 +177,17 @@ function displayTempInFahrenheit(event) {
   for (let index = 0; index < unitF.length; index++) {
     unitF[index].innerHTML = "ºF";
   }
+
+  document
+    .querySelector("#fahrenheit-label-btn")
+    .setAttribute("class", "active-unit");
+  document
+    .querySelector("#celsius-label-btn")
+    .setAttribute("class", "alternative-unit");
+
+  changeUnitToF.removeEventListener("click", displayTempInFahrenheit);
+  let changeUnitToC = document.querySelector("#celsius");
+  changeUnitToC.addEventListener("click", displayTempInCelsius);
 }
 let changeUnitToF = document.querySelector("#fahrenheit");
 changeUnitToF.addEventListener("click", displayTempInFahrenheit);
@@ -192,10 +227,23 @@ function displayTempInCelsius(event) {
   for (let index = 0; index < unitC.length; index++) {
     unitC[index].innerHTML = "ºC";
   }
+
+  document
+    .querySelector("#celsius-label-btn")
+    .setAttribute("class", "active-unit");
+  document
+    .querySelector("#fahrenheit-label-btn")
+    .setAttribute("class", "alternative-unit");
+
+  changeUnitToC.removeEventListener("click", displayTempInCelsius);
+  let changeUnitToF = document.querySelector("#fahrenheit");
+  changeUnitToF.addEventListener("click", displayTempInFahrenheit);
 }
 let changeUnitToC = document.querySelector("#celsius");
 changeUnitToC.addEventListener("click", displayTempInCelsius);
 
 let celsiusCurrentTemp = null;
+
+let defaultUnit = document.querySelector(".active-unit");
 
 search("Porto");
